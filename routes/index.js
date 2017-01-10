@@ -9,47 +9,48 @@ router.get('/', function(req, res, next) {
     userName:'shunsuke_moai',
     password:'Nikuniku0831',
     server:'2016web2-13-sakaki.database.windows.net',
-    options:{encrypt:true,database:'2016web2-13-app'}
+    options:{encrypt: true,database:'2016web2-13-app'}
   };
-  var connection = new Connection(config);
-  connection.on('connect',function(err){
+  
+  var connection = new Connection(config);  
+  connection.on('connect', function(err) {
     if(err){
-      res.render('index',{title:"はじめてのDB",message:err});
+      res.render('index', {title:"はじめての DB", message:err});
     }else{
-      console.log("Connected");
-      executeStatement();
-    }
-});
+        console.log("Connected");  
+        executeStatement();  
+      }
+  }); 
   
-  var Request=require('tedious').Request;
-  var TYPES=require('tedious').TYPES;
+  var Request = require('tedious').Request;  
+  var TYPES = require('tedious').TYPES;  
   
-  function executeStatement(){
-    request=new Request("SELECT TOP(10) CompanyName FROM SalesLT.Customer;",function(err){
-      if(err){
-        console.log(err);}
-    });
-    
-    var result='<table>';
-    
-    request.on('row', function(columns){
-      result+='<tr>';
-      columns.forEach(function(column){
-        if(column.value===null){
+  function executeStatement() {  
+    request = new Request("SELECT TOP(10) CompanyName FROM SalesLT.Customer;", function(err) {
+    if (err) {  
+      console.log(err);}  
+    });  
+
+    var result = '<table>';  
+
+    request.on('row', function(columns) {// データの取得毎に呼ばれる
+      result += '<tr>'; 
+      columns.forEach(function(column) {
+        if (column.value === null) {
           console.log('NULL');
-        }else{
-          result+='<td>' + column.value + '<td>';
+        } else {
+          result+= '<td>' + column.value + '</td>';
         }
-        result+='<tr>';
-      });
-    });
+        result += '</tr>';
+      }); 
+    });  
+
+    request.on('doneProc', function (rowCount, more, returnStatus, rows) {// 完了したら呼ばれる
+      result += "</table>";
+      res.render('index', {title:"はじめての DB", message:result});
+    });  
     
-    request.on('doneProc'),function(rowCount,more,returnStatus,rows){
-      result+="</table>";
-      res.render('index'.{title:"はじめてのDB",message:result});
-    });
-    
-    connection.execSql(request);
+    connection.execSql(request);  
   }
 });
 
