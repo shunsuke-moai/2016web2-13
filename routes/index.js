@@ -8,12 +8,12 @@ router.get('/', function(req, res, next) {
     userName:'shunsuke_moai',
     password:'Nikuniku0831',
     server:'2016web2-13-sakaki.database.windows.net',
-    options:{encrypt:true,database:'2016web2-13'}
+    options:{encrypt:true,database:'2016web2-13-app'}
   };
   var connection = new Connection(config);
   connection.on('connect',function(err){
     if(err){
-      res.render('index',{title:"はじめてのでーたべーす",message:err});
+      res.render('index',{title:"はじめてのDB",message:err});
     }else{
       console.log("Connected");
       executeStatement();
