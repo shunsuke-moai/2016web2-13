@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
     userName:'shunsuke_moai',
     password:'Nikuniku0831',
     server:'2016web2-13-sakaki.database.windows.net',
-    options:{encrypt: true,database:'2016web2-13-app'}
+    options:{encrypt: true,database:'2016web2-13'}
   };
   
   var connection = new Connection(config);  
